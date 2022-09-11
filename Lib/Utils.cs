@@ -10,7 +10,7 @@ namespace Videcoder
 {
     internal static class Utils
     {
-        internal static bool HWDeviceIsMatch(AVHWDeviceType deviceType, HWDevice deviceFlag)
+        internal static bool IsMatching(this AVHWDeviceType deviceType, HWDevice deviceFlag)
         {
             return (deviceFlag & (HWDevice)(1 << (int)deviceType)) != 0;
         }

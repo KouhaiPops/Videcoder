@@ -12,30 +12,6 @@ namespace Videcoder
 {
     sealed internal class MemoryManager<T> : ArrayPool<T> where T : unmanaged 
     {
-        private class GcCallback : CriticalFinalizerObject
-        {
-            private readonly Action callback;
-            private GCHandle handle;
-            public GcCallback(Action callback, object obj)
-            {
-                this.callback = callback;
-                handle = GCHandle.Alloc(obj, GCHandleType.Weak);
-
-            }
-            
-            public static void Register(Action callback, object obj)
-            {
-                _ = new GcCallback(callback, obj);
-            }
-
-            ~GcCallback() {
-                if(handle.IsAllocated && handle.Target != null)
-                {
-                    callback();
-                    GC.ReRegisterForFinalize(this);
-                }
-            }
-        }
         private struct CacheArray
         {
             public T[] Array;
@@ -74,7 +50,6 @@ namespace Videcoder
             if (cachedArrays == null)
             {
                 cachedArrays = new CacheArray[MaxArrayCount];
-                GcCallback.Register(Reset, this);
             }
 
             if (index >= MaxArrayCount)

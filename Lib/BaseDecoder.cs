@@ -107,7 +107,7 @@ namespace Videcoder
                 var cfg = ffmpeg.avcodec_get_hw_config(codec, index++);
                 if (cfg == null)
                     break;
-                if (Utils.HWDeviceIsMatch(cfg->device_type, targetHWDevice))
+                if (cfg->device_type.IsMatching(targetHWDevice))
                     hwDevices.Add(cfg->device_type);
             }
             return hwDevices;
